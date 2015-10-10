@@ -8,7 +8,7 @@
   define, window, process, Packages,
   java, location, Components, FileUtils */
 
-define(['module', 'underscore'], function (module, _) {
+define(['module'], function (module) {
     'use strict';
 
     var text, fs, Cc, Ci, xpcIsWindows,
@@ -145,15 +145,15 @@ define(['module', 'underscore'], function (module, _) {
         },
 
         finishLoad: function (name, content, onLoad) {
-            onLoad(_.partial(function (content) {
+            onLoad(function () {
             	var blob = new Blob([content]);
             	var worker = new Worker(window.URL.createObjectURL(blob));
 
-            	if (masterConfig.isBuild) {
-            		buildMap[name] = worker;
-            	}
+            	//if (masterConfig.isBuild) {
+            	//	buildMap[name] = worker;
+            	//}
             	return worker;
-            }, content));
+            });
 
         },
 
