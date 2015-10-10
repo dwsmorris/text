@@ -144,8 +144,7 @@ define(['module'], function (module) {
                    ((!uPort && !uHostName) || uPort === port);
         },
 
-        finishLoad: function (name, strip, content, onLoad) {
-            content = strip ? text.strip(content) : content;
+        finishLoad: function (name, content, onLoad) {
             if (masterConfig.isBuild) {
                 buildMap[name] = content;
             }
@@ -184,15 +183,7 @@ define(['module'], function (module) {
 
             //Load the text. Use XHR if possible and in a browser.
             if (!hasLocation || useXhr(url, defaultProtocol, defaultHostName, defaultPort)) {
-            	onLoad(new Worker(url));
-				/*
-                text.get(url, function (content) {
-                    text.finishLoad(name, parsed.strip, content, onLoad);
-                }, function (err) {
-                    if (onLoad.error) {
-                        onLoad.error(err);
-                    }
-                });*/
+                text.finishLoad(name, new Worker(url), onLoad);
             } else {
                 //Need to fetch the resource across domains. Assume
                 //the resource has been optimized into a JS module. Fetch
@@ -200,7 +191,7 @@ define(['module'], function (module) {
                 //!strip part to avoid file system issues.
                 req([nonStripName], function (content) {
                     text.finishLoad(parsed.moduleName + '.' + parsed.ext,
-                                    parsed.strip, content, onLoad);
+                                    content, onLoad);
                 });
             }
         },
