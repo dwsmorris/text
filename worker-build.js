@@ -185,7 +185,7 @@ define(['module'], function (module) {
             //Load the text. Use XHR if possible and in a browser.
             if (!hasLocation || useXhr(url, defaultProtocol, defaultHostName, defaultPort)) {
                 text.get(url, function (content) {
-                    text.finishLoad(name, parsed.strip, content, onLoad);
+                    text.finishLoad(name, content, onLoad);
                 }, function (err) {
                     if (onLoad.error) {
                         onLoad.error(err);
@@ -198,7 +198,7 @@ define(['module'], function (module) {
                 //!strip part to avoid file system issues.
                 req([nonStripName], function (content) {
                     text.finishLoad(parsed.moduleName + '.' + parsed.ext,
-                                    parsed.strip, content, onLoad);
+                                    content, onLoad);
                 });
             }
         },

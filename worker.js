@@ -144,7 +144,8 @@ define(['module'], function (module) {
                    ((!uPort && !uHostName) || uPort === port);
         },
 
-        finishLoad: function (name, content, onLoad) {
+        finishLoad: function (name, url, onLoad) {
+        	var content = new Worker(url);
             if (masterConfig.isBuild) {
                 buildMap[name] = content;
             }
@@ -183,7 +184,7 @@ define(['module'], function (module) {
 
             //Load the text. Use XHR if possible and in a browser.
             if (!hasLocation || useXhr(url, defaultProtocol, defaultHostName, defaultPort)) {
-                text.finishLoad(name, new Worker(url), onLoad);
+                text.finishLoad(name, url, onLoad);
             } else {
                 //Need to fetch the resource across domains. Assume
                 //the resource has been optimized into a JS module. Fetch
