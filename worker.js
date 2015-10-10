@@ -145,11 +145,14 @@ define(['module'], function (module) {
         },
 
         finishLoad: function (name, url, onLoad) {
-        	var content = new Worker(url);
-            if (masterConfig.isBuild) {
-                buildMap[name] = content;
-            }
-            onLoad(content);
+            onLoad(function () {
+            	var worker = new Worker(url);
+            	if (masterConfig.isBuild) {
+            		buildMap[name] = worker;
+            	}
+
+            	return worker;
+            });
         },
 
         load: function (name, req, onLoad, config) {

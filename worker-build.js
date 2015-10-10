@@ -8,7 +8,7 @@
   define, window, process, Packages,
   java, location, Components, FileUtils */
 
-define(['module'], function (module) {
+define(['module', 'underscore'], function (module, _) {
     'use strict';
 
     var text, fs, Cc, Ci, xpcIsWindows,
@@ -144,12 +144,17 @@ define(['module'], function (module) {
                    ((!uPort && !uHostName) || uPort === port);
         },
 
-        finishLoad: function (name, strip, content, onLoad) {
-            content = strip ? text.strip(content) : content;
-            if (masterConfig.isBuild) {
-                buildMap[name] = content;
-            }
-            onLoad(content);
+        finishLoad: function (name, content, onLoad) {
+            onLoad(_.partial(function (content) {
+            	var blob = new Blob([content]);
+            	var worker = new Worker(window.URL.createObjectURL(blob));
+
+            	if (masterConfig.isBuild) {
+            		buildMap[name] = worker;
+            	}
+            	return worker;
+            }, content));
+
         },
 
         load: function (name, req, onLoad, config) {
