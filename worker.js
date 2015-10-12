@@ -150,7 +150,13 @@ define(['module'], function (module) {
 				buildMap[name] = content;
 				onLoad(content);
 			} else {
-				onLoad("new Worker('" + content + "');");
+				var url = document.location.href;
+				var index = url.indexOf('index.html');
+				if (index != -1) {
+					url = url.substring(0, index);
+				}
+
+				onLoad("new Worker('" + url + content + "');");
 			}
 		},
 
@@ -213,7 +219,7 @@ define(['module'], function (module) {
 			if (buildMap.hasOwnProperty(moduleName)) {
 				var content = text.jsEscape(buildMap[moduleName]);
 				write.asModule(pluginName + "!" + moduleName,
-                               "define(function () { return \"new Worker(window.URL.createObjectURL(new Blob([\\\""
+                               "define(function () { return \"new Worker(URL.createObjectURL(new Blob([\\\""
 							   + content.replace(/["]/g, "\\\\\\\"").replace(/[']/g, "\\\\\"").replace(/\\r\\n/g, " ")
 							   + "\\\"])))\";});\n");
 			}
