@@ -214,7 +214,7 @@ define(['module'], function (module) {
 				var content = text.jsEscape(buildMap[moduleName]);
 				write.asModule(pluginName + "!" + moduleName,
                                "define(function () { return \"new Worker(window.URL.createObjectURL(new Blob([\\\""
-							   + content.replace(/["]/g, "\\\\\\\"").replace(/[']/g, "\\\\\"")
+							   + content.replace(/["]/g, "\\\\\\\"").replace(/[']/g, "\\\\\"").replace(/\\r\\n/g, " ")
 							   + "\\\"])))\";});\n");
 			}
 		},
