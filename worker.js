@@ -150,7 +150,7 @@ define(['module'], function (module) {
 				buildMap[name] = content;
 				onLoad(content);
 			} else {
-				onLoad(new Worker(content));
+				onLoad("new Worker('" + content + "');");
 			}
 		},
 
@@ -213,9 +213,9 @@ define(['module'], function (module) {
 			if (buildMap.hasOwnProperty(moduleName)) {
 				var content = text.jsEscape(buildMap[moduleName]);
 				write.asModule(pluginName + "!" + moduleName,
-                               "define(function () { return new Worker(window.URL.createObjectURL(new Blob(['" +
-                                   content +
-                               "'])));});\n");
+                               "define(function () { return \"new Worker(window.URL.createObjectURL(new Blob([\\\""
+							   + "self.postMessage(\\\\\\\"msg from worker 1\\\\\\\");"
+							   + "\\\"])))\";});\n");
 			}
 		},
 
